@@ -1,0 +1,963 @@
+{
+  "version": "1",
+  "actions": {
+    "loadData": {
+      "body": "\n    const [searchValue, loadCallback, currentDataLength] = e.args\n\n    fetch ('https://gist.githubusercontent.com/rogargon/5534902/raw/434445021e155240ca78e378f10f70391dd594ea/countries.json')\n        .then (data => data.json())\n        .then (data => {\n            const preparedData = data\n                .filter(value => value.toLowerCase().includes(searchValue.toLowerCase()))\n                .slice(currentDataLength, currentDataLength + 20)\n                .map(value => ({value, label: value}))\n\n            loadCallback(preparedData)        \n        })\n",
+      "params": {}
+    },
+    "showValidationResult": {
+      "body": "    const setVisible = (key, visible) => {\n        const componentStore = e.store.form.componentTree.findByKey(key)?.store\n        if (componentStore) {\n            componentStore.renderWhen = {value: visible}\n        }\n    }\n    const hasErrors = e.store.form.componentTree.hasErrors\n    setVisible('errorMessage', hasErrors)\n    setVisible('successMessage', !hasErrors)",
+      "params": {}
+    }
+  },
+  "tooltipType": "RsTooltip",
+  "errorType": "RsErrorMessage",
+  "form": {
+    "key": "formGarments",
+    "type": "Screen",
+    "props": {
+      "error": {
+        "value": {}
+      }
+    },
+    "css": {
+      "any": {
+        "string": " background-color: white;\n font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;",
+        "object": {
+          "width": "100%",
+          "height": "fit-content"
+        }
+      }
+    },
+    "children": [
+      {
+        "key": "Header",
+        "type": "RsHeader",
+        "props": {
+          "content": {
+            "value": "تدوين شراء ملابس"
+          },
+          "headerSize": {
+            "value": "h4"
+          }
+        },
+        "css": {
+          "any": {
+            "object": {
+              "textAlign": "center"
+            },
+            "string": "padding: 10px;"
+          }
+        },
+        "wrapperCss": {
+          "any": {
+            "object": {
+              "marginTop": "2%"
+            }
+          }
+        }
+      },
+ 
+          {
+            "key": "Email hint",
+            "type": "RsLabel",
+            "props": {
+              "text": {
+                "value": "الرجاء ملء هذا النموذج من محل الملابس وبعثه عند تمام عملية الحجز لمساعدتنا على الدفع للتاجر٬ وتذكروا أن تفاصلوا التاجر وترفضوا الأسعار غير المنطقية وتقتصدوا٬ فأموالنا هي كأموالكم٬ وبارك الله فيكم."
+              }
+            },
+            "css": {
+              "any": {
+                "object": {
+                  "textAlign": "center"
+                },
+                "string": ""
+              }
+            },
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "95%",
+                  "marginRight": "auto",
+                  "marginLeft": "auto"
+                }
+              }
+            }
+  
+  
+      },
+      {
+        "key": "Main container",
+        "type": "RsContainer",
+        "props": {},
+        "css": {
+          "desktop": {
+            "string": "border: 1px solid lightgray;\nborder-radius: 6px;\npadding: 20px;"
+          },
+          "any": {
+            "string": " background-color: #f5f5f5;\n font-weight: 500;",
+            "object": {
+              "gap": "10px"
+            }
+          }
+        },
+        "children": [
+          {
+            "key": "shopContainer",
+            "type": "RsContainer",
+            "props": {},
+            "css": {
+              "any": {
+                "string": "background-color: white;\nborder-radius: 10px;\npadding: 15px;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);",
+                "object": {
+                  "gap": "18px"
+                }
+              }
+            },
+            "children": [
+              {
+                "key": "Name container",
+                "type": "RsContainer",
+                "props": {},
+                "css": {
+                  "any": {
+                    "object": {
+                      "flexDirection": "row"
+                    }
+                  }
+                },
+                "children": [
+                  {
+                    "key": "shopName",
+                    "type": "RsInput",
+                    "props": {
+                      "label": {
+                        "value": "اسم المحل ومكانه"
+                      }
+                    },
+                    "schema": {
+                      "type": "string",
+                      "validations": [
+                        {
+                          "key": "required",
+                          "args": {
+                            "message": "محتاجينه"
+                          }
+                        }
+                      ],
+                      "autoValidate": true
+                    }
+                  },
+                  {
+                    "key": "shopOwner",
+                    "type": "RsInput",
+                    "props": {
+                      "label": {
+                        "value": "اسم صاحب المحل"
+                      }
+                    },
+                    "schema": {
+                      "type": "string",
+                      "validations": [
+                        {
+                          "key": "required",
+                          "args": {
+                            "message": "محتاجينه"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "key": "shopRecommendation",
+                "type": "RsInput",
+                "props": {
+                  "label": {
+                    "value": "هل تنصحيننا بالمتابعة بالتعامل مع هذا المحل؟ الرجاء التوضيح قدر الإمكان"
+                  }
+                },
+                "schema": {
+                  "type": "string",
+                  "validations": [
+                    {
+                      "key": "required",
+                      "args": {
+                        "message": "عجبتكم البضاعة؟ البياع لطيف؟"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "marginTop": "3%",
+                  "marginLeft": "auto",
+                  "marginRight": "auto",
+                  "width": "96%"
+                }
+              }
+            }
+          },
+          {
+            "key": "headingGarments",
+            "type": "RsHeader",
+            "props": {
+              "content": {
+                "value": "القطع المطلوبة"
+              },
+              "headerSize": {
+                "value": "h5"
+              }
+            },
+            "css": {
+              "any": {
+                "string": "padding: 10px;"
+              }
+            },
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "96%",
+                  "marginLeft": "auto",
+                  "marginRight": "auto"
+                }
+              }
+            }
+          },
+          {
+            "key": "sexAgeContainer",
+            "type": "RsContainer",
+            "props": {},
+            "children": [
+              {
+                "key": "radioGender",
+                "type": "RsRadioGroup",
+                "props": {
+                  "label": {
+                    "value": "الجنس"
+                  },
+                  "items": {
+                    "value": [
+                      {
+                        "value": "male",
+                        "label": "ذكر"
+                      },
+                      {
+                        "value": "femal",
+                        "label": "أنثى"
+                      }
+                    ]
+                  },
+                  "inline": {
+                    "value": true
+                  },
+                  "appearance": {
+                    "value": "default"
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "fit-content"
+                    }
+                  }
+                },
+                "schema": {
+                  "validations": [
+                    {
+                      "key": "required",
+                      "args": {
+                        "message": "محتاجينه"
+                      }
+                    }
+                  ]
+                },
+                "htmlAttributes": [
+                  {}
+                ],
+                "css": {
+                  "any": {
+                    "string": ""
+                  }
+                }
+              },
+              {
+                "key": "numberAge",
+                "type": "RsNumberFormat",
+                "props": {
+                  "label": {
+                    "value": "العمر"
+                  },
+                  "suffix": {
+                    "value": " سنوات"
+                  },
+                  "size": {
+                    "value": "sm"
+                  },
+                  "allowNegative": {
+                    "value": false
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "8em"
+                    }
+                  }
+                },
+                "schema": {
+                  "validations": [
+                    {
+                      "key": "finite",
+                      "args": {
+                        "message": "محتاجينه"
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "css": {
+              "any": {
+                "object": {
+                  "flexDirection": "row"
+                },
+                "string": "background-color: white;\nborder-radius: 10px;\npadding: 15px;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);"
+              }
+            },
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "96%",
+                  "marginRight": "auto",
+                  "marginLeft": "auto"
+                }
+              }
+            }
+          },
+          {
+            "key": "garmentContainer",
+            "type": "RsContainer",
+            "props": {},
+            "css": {
+              "any": {
+                "object": {
+                  "flexDirection": "row"
+                },
+                "string": "background-color: white;\nborder-radius: 10px;\npadding: 15px;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);"
+              }
+            },
+            "children": [
+              {
+                "key": "dropGarmentType",
+                "type": "RsDropdown",
+                "props": {
+                  "label": {
+                    "value": "نوع القطعة"
+                  },
+                  "data": {
+                    "value": [
+                      {
+                        "value": "underwear_upper",
+                        "label": "ملابس داخلية علوية"
+                      },
+                      {
+                        "value": "underwear_lower",
+                        "label": "ملابس داخلية سفلية"
+                      },
+                      {
+                        "value": "pants",
+                        "label": "بنطال"
+                      },
+                      {
+                        "value": "shirt",
+                        "label": "قميص"
+                      },
+                      {
+                        "value": "jallabiyya",
+                        "label": "جلابية أو روب صلاة"
+                      },
+                      {
+                        "value": "towel",
+                        "label": "منشفة"
+                      },
+                      {
+                        "value": "footwear",
+                        "label": "شبشب"
+                      },
+                      {
+                        "value": "abaya",
+                        "label": "عباية"
+                      },
+                      {
+                        "value": "other",
+                        "label": "شي آخر"
+                      }
+                    ]
+                  },
+                  "placeholder": {
+                    "value": "اختار نوع القطعة"
+                  },
+                  "creatable": {
+                    "value": false
+                  },
+                  "cleanable": {
+                    "value": true
+                  }
+                },
+                "css": {
+                  "any": {
+                    "string": ""
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "fit-content"
+                    },
+                    "string": ""
+                  }
+                },
+                "schema": {
+                  "validations": [
+                    {
+                      "key": "required",
+                      "args": {
+                        "message": "محتاجينه"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "key": "textGarmentType",
+                "type": "RsInput",
+                "props": {
+                  "label": {
+                    "value": "الوصف"
+                  },
+                  "placeholder": {
+                    "value": "نوع القطعة غير المذكور"
+                  },
+                  "htmlAttributes": {
+                    "fnSource": "    return \"disabled=true\";\n    return form.data['dropGarmentType'] == 'other' ? { disabled: true } : { disabled: false };"
+                  },
+                  "disabled": {
+                    "value": false
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "fit-content"
+                    }
+                  }
+                },
+                "schema": {
+                  "type": "string",
+                  "validations": [
+                    {
+                      "key": "required",
+                      "args": {
+                        "message": "محتاجينه"
+                      }
+                    }
+                  ]
+                },
+                "htmlAttributes": [],
+                "renderWhen": {
+                  "fnSource": "    return form.data['dropGarmentType'] == 'other';",
+                  "computeType": "function",
+                  "value": ""
+                }
+              }
+            ],
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "marginLeft": "auto",
+                  "marginRight": "auto",
+                  "width": "96%"
+                }
+              }
+            }
+          },
+          {
+            "key": "sizeContainer",
+            "type": "RsContainer",
+            "props": {},
+            "css": {
+              "any": {
+                "object": {},
+                "string": "background-color: white;\nborder-radius: 10px;\npadding: 15px;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);"
+              }
+            },
+            "children": [
+              {
+                "key": "radioSize",
+                "type": "RsRadioGroup",
+                "props": {
+                  "inline": {
+                    "value": true
+                  },
+                  "label": {
+                    "value": "المقاس"
+                  },
+                  "items": {
+                    "value": [
+                      {
+                        "value": "xsmall",
+                        "label": "XS"
+                      },
+                      {
+                        "value": "small",
+                        "label": "S"
+                      },
+                      {
+                        "value": "medium",
+                        "label": "M"
+                      },
+                      {
+                        "value": "large",
+                        "label": "L"
+                      },
+                      {
+                        "value": "xlarge",
+                        "label": "XL"
+                      },
+                      {
+                        "value": "exact",
+                        "label": "مقاس محدد"
+                      }
+                    ]
+                  },
+                  "appearance": {
+                    "value": "default"
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "fit-content"
+                    }
+                  }
+                },
+                "css": {
+                  "any": {
+                    "string": ""
+                  }
+                }
+              },
+              {
+                "key": "numberExactSize",
+                "type": "RsNumberFormat",
+                "props": {
+                  "label": {
+                    "value": "المقاس المحدد"
+                  },
+                  "allowNegative": {
+                    "value": false
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "7em"
+                    }
+                  }
+                },
+                "schema": {
+                  "validations": [
+                    {
+                      "key": "integer",
+                      "args": {
+                        "message": "محتاجينه"
+                      }
+                    }
+                  ]
+                },
+                "renderWhen": {
+                  "fnSource": "    return form.data['radioSize'] == 'exact';",
+                  "computeType": "function"
+                }
+              }
+            ],
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "marginLeft": "auto",
+                  "marginRight": "auto",
+                  "width": "96%"
+                }
+              }
+            }
+          },
+          {
+            "key": "priceContainer",
+            "type": "RsContainer",
+            "props": {},
+            "css": {
+              "any": {
+                "object": {
+                  "flexDirection": "row",
+                  "flexWrap": "wrap"
+                },
+                "string": "background-color: white;\nborder-radius: 10px;\npadding: 15px;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);"
+              }
+            },
+            "children": [
+              {
+                "key": "variablePriceContainer",
+                "type": "RsContainer",
+                "props": {},
+                "css": {
+                  "any": {
+                    "object": {
+                      "flexDirection": "row"
+                    }
+                  }
+                },
+                "children": [
+                  {
+                    "key": "numberPrice",
+                    "type": "RsNumberFormat",
+                    "props": {
+                      "label": {
+                        "value": "السعر قبل المفاصلة"
+                      },
+                      "suffix": {
+                        "value": " شيكل"
+                      }
+                    },
+                    "wrapperCss": {
+                      "any": {
+                        "object": {
+                          "width": "9em"
+                        }
+                      }
+                    },
+                    "renderWhen": {
+                      "fnSource": "    return !form.data['checkboxFixedPrice'];",
+                      "computeType": "function"
+                    },
+                    "schema": {
+                      "validations": [
+                        {
+                          "key": "finite",
+                          "args": {
+                            "message": "محتاجينه"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "key": "numberFinalPrice",
+                    "type": "RsNumberFormat",
+                    "props": {
+                      "label": {
+                        "value": "السعر النهائي"
+                      },
+                      "suffix": {
+                        "value": " شيكل"
+                      }
+                    },
+                    "wrapperCss": {
+                      "any": {
+                        "object": {
+                          "width": "8em"
+                        }
+                      }
+                    },
+                    "schema": {
+                      "validations": [
+                        {
+                          "key": "finite",
+                          "args": {
+                            "message": "محتاجينه"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "key": "checkboxFixedPrice",
+                "type": "RsCheckbox",
+                "props": {
+                  "inline": {
+                    "value": false
+                  },
+                  "children": {
+                    "value": "سعر ثابت؟"
+                  },
+                  "checked": {
+                    "value": false
+                  },
+                  "title": {
+                    "value": ""
+                  },
+                  "disabled": {
+                    "value": false
+                  },
+                  "readOnly": {
+                    "value": false
+                  },
+                  "className": {
+                    "value": ""
+                  }
+                },
+                "css": {
+                  "any": {
+                    "string": " label{\n    font-weight: 500;\n }"
+                  }
+                },
+                "wrapperCss": {
+                  "any": {
+                    "object": {
+                      "width": "8em",
+                      "height": "auto",
+                      "marginRight": "4px"
+                    },
+                    "string": "    "
+                  }
+                },
+                "htmlAttributes": []
+              }
+            ],
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "96%",
+                  "marginRight": "auto",
+                  "marginLeft": "auto"
+                }
+              }
+            }
+          },
+          {
+            "key": "errorMessage",
+            "type": "RsStaticContent",
+            "props": {
+              "content": {
+                "value": "بعض المعلومات الضرورية غائبة"
+              }
+            },
+            "css": {
+              "any": {
+                "string": "color: red;"
+              }
+            },
+            "renderWhen": {
+              "value": true
+            },
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "96%",
+                  "marginLeft": "auto",
+                  "marginRight": "auto"
+                }
+              }
+            }
+          },
+          {
+            "key": "successMessage",
+            "type": "RsStaticContent",
+            "props": {
+              "content": {
+                "value": "انبعث الطلب وسنتواصل معك لتأكيد الدفع!"
+              }
+            },
+            "css": {
+              "any": {
+                "string": "color: green;"
+              }
+            },
+            "renderWhen": {
+              "value": false
+            },
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "96%",
+                  "marginLeft": "auto",
+                  "marginRight": "auto"
+                }
+              }
+            }
+          },
+          {
+            "key": "Save button",
+            "type": "RsButton",
+            "props": {
+              "block": {
+                "value": false
+              },
+              "appearance": {
+                "value": "ghost"
+              },
+              "children": {
+                "value": "ضيف قطعة"
+              },
+              "size": {
+                "value": "sm"
+              },
+              "loading": {
+                "computeType": "function",
+                "fnSource": "    return form.isValidating",
+                "value": false
+              },
+              "color": {
+                "value": "green"
+              }
+            },
+            "events": {
+              "onClick": [
+                {
+                  "name": "validate",
+                  "type": "common"
+                },
+                {
+                  "name": "showValidationResult",
+                  "type": "code"
+                }
+              ]
+            },
+            "css": {
+              "any": {
+                "string": " background-color: white;\n border: 1px solid #009946;\n font-weight: 550;\n color: #009946;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);"
+              }
+            },
+            "wrapperCss": {
+              "any": {
+                "object": {
+                  "width": "96%",
+                  "marginRight": "auto",
+                  "marginLeft": "auto",
+                  "marginBottom": "3%"
+                }
+              }
+            }
+          }
+        ],
+        "wrapperCss": {
+          "any": {
+            "object": {
+              "width": "95%",
+              "marginRight": "auto",
+              "marginLeft": "auto"
+            }
+          }
+        }
+      },
+      {
+        "key": "RsMessage 1",
+        "type": "RsMessage",
+        "props": {},
+        "children": [
+          {
+            "key": "labelTotal",
+            "type": "RsLabel",
+            "props": {
+              "text": {
+                "value": "المبلغ الإجمالي للملابس المحجوزة"
+              }
+            },
+            "slot": "header",
+            "css": {
+              "any": {
+                "string": "font-weight: 500;"
+              }
+            }
+          },
+          {
+            "key": "RsHeader 1",
+            "type": "RsHeader",
+            "props": {
+              "content": {
+                "computeType": "function",
+                "fnSource": "    if (Number.isFinite(parseFloat(form.data['numberFinalPrice'])))\n        return form.data['numberFinalPrice'] + ' شيكل';\n    else\n        return '...';"
+              }
+            },
+            "slot": "header",
+            "css": {
+              "any": {
+                "string": " color: #009946;"
+              }
+            }
+          },
+          {
+            "key": "headerTotal",
+            "type": "RsHeader",
+            "props": {
+              "content": {
+                "value": ""
+              }
+            }
+          }
+        ],
+        "css": {
+          "any": {
+            "string": "    background-color: white;\n    border: 1px solid #009946;\n     box-shadow: 2px 5px 10px rgba(0,0,0,0.3);\n"
+          }
+        },
+        "wrapperCss": {
+          "any": {
+            "object": {
+              "width": "95%",
+              "marginRight": "auto",
+              "marginLeft": "auto"
+            }
+          }
+        }
+      },
+      {
+        "key": "RsButton 1",
+        "type": "RsButton",
+        "props": {
+          "appearance": {
+            "value": "primary"
+          },
+          "children": {
+            "value": "حجزنا الملابس وتوكلنا على الله"
+          },
+          "color": {
+            "value": "green"
+          }
+        },
+        "wrapperCss": {
+          "any": {
+            "object": {
+              "width": "95%",
+              "marginRight": "auto",
+              "marginLeft": "auto",
+              "marginBottom": "2%"
+            }
+          }
+        },
+        "css": {
+          "any": {
+            "string": " background-color: #009946;\n font-weight: 550;\n box-shadow: 2px 5px 10px rgba(0,0,0,0.3);\n"
+          }
+        }
+      }
+    ]
+  },
+  "localization": {},
+  "languages": [
+    {
+      "code": "en",
+      "dialect": "US",
+      "name": "English",
+      "description": "American English",
+      "bidi": "ltr"
+    }
+  ],
+  "defaultLanguage": "en-US"
+}

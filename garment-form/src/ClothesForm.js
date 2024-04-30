@@ -28,7 +28,7 @@ function ClothesForm(props) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const endpoint = urlParams.get('e') ?? 'clv76u42u0008lgmpa0sv2lhw';
-  const beneficiary = urlParams.get('b') ?? '2LrZitixINmF2LnYsdmI2YE=';
+  const beneficiary = urlParams.get('b') ?? '2LrZitixINmF2LnYsdmI2YE';
 
   const FormElement = useRef(null);
   const FormPayload = useRef(null);

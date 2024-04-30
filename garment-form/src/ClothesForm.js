@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import RsInput from "./RsInput";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography, filledInputClasses } from "@mui/material";
 import RsNumberFormat from "./RsNumberFormat";
 import RsRadioGroup from "./RsRadioGroup";
 import RsDropdown from "./RsDropdown";
@@ -33,9 +33,18 @@ function ClothesForm(props) {
   const FormElement = useRef(null);
   const FormPayload = useRef(null);
   const [submitting, setSubmitting] = useState(false);
+  const [total, setTotal] = useState(0);
   const [pieces, setPieces] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  useEffect(() => {
+    if (!pieces) {
+      setTotal(0);
+    } else {
+      setTotal(pieces.reduce((acc, piece) => (parseFloat(acc) || 0 ) + (parseFloat(piece.numberFinalPrice) || 0), 0));
+    }
+  }, [pieces]);
 
   const handleChange = (key, value) => {
     setFormValues((prev) => ({
@@ -380,7 +389,7 @@ function ClothesForm(props) {
                 sx={{ fontSize: "25px", fontWeight: 600, color: "green" }}
               >
                 <span dir="rtl">شيكل</span>
-                {" " + formValues["numberFinalPrice"]}
+                {" " + total }
               </Typography>
             </>
           )}
@@ -426,6 +435,7 @@ function ClothesForm(props) {
   return (
     <Container fixed sx={{ backgroundColor: "#f5f5f5" }}>
       <form ref={FormElement} action={`https://forms.palcollective.com/f/${endpoint}`} method="POST">
+        <input style={{display: 'none'}} name='sum' value={total}></input>
         <input style={{display: 'none'}} name='beneficiary' value={beneficiary}></input>
         <input style={{display: 'none'}} ref={FormPayload} name='payload' value={JSON.stringify(pieces)}></input>
       </form>
@@ -444,6 +454,13 @@ function ClothesForm(props) {
           ))}
         </>
       </Grid>
+      <ul style={{direction: 'rtl'}}>
+        {
+          pieces.map(({radioSize, dropGarmentType, numberFinalPrice}, index) => (
+            <li key={index}>{dropGarmentType} ({radioSize}): {numberFinalPrice}</li>
+          ))
+        }
+      </ul>
      { submitting && <div id='SubmissionScreen'>
         <h1>الرجاء الانتظار</h1>
       </div> }

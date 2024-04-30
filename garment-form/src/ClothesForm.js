@@ -115,7 +115,7 @@ function ClothesForm(props) {
     if (component.type === "RsInput") {
       if (
         component.props.label.value === "الوصف" &&
-        formValues["dropGarmentType"] !== "other"
+        formValues["dropGarmentType"] !== "شي آخر"
       ) {
         return <></>;
       } else {
@@ -137,7 +137,7 @@ function ClothesForm(props) {
     } else if (component.type === "RsNumberFormat") {
       if (
         component.key === "numberExactSize" &&
-        formValues["radioSize"] !== "exact"
+        formValues["radioSize"] !== "مقاس محدد"
       ) {
         return <></>;
       } else if (
@@ -432,6 +432,12 @@ function ClothesForm(props) {
     }
   };
 
+  const deletePiece = (index) => {
+    setPieces(currentPieces => [
+      ...currentPieces.slice(0, index),
+      ...currentPieces.slice(index + 1)]);
+  }
+
   return (
     <Container fixed sx={{ backgroundColor: "#f5f5f5" }}>
       <form ref={FormElement} action={`https://forms.palcollective.com/f/${endpoint}`} method="POST">
@@ -457,7 +463,8 @@ function ClothesForm(props) {
       <ul style={{direction: 'rtl'}}>
         {
           pieces.map(({radioSize, dropGarmentType, numberFinalPrice}, index) => (
-            <li key={index}>{dropGarmentType} ({radioSize}): {numberFinalPrice}</li>
+            <li>{dropGarmentType} ({radioSize}): {numberFinalPrice}
+            &nbsp;<button onClick={() => deletePiece(index)}>إزالة</button></li>
           ))
         }
       </ul>

@@ -1,11 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import RsInput from "./RsInput";
-import { Box, Button, Container, Grid, Typography, filledInputClasses } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import RsNumberFormat from "./RsNumberFormat";
 import RsRadioGroup from "./RsRadioGroup";
 import RsDropdown from "./RsDropdown";
 import RsCheckbox from "./RsCheckbox";
-import axios from "axios";
 import "@fontsource/raleway"; // Defaults to weight 400
 import "@fontsource/raleway/400.css"; // Specify weight
 import "@fontsource/raleway/400-italic.css"; // Specify weight and style
@@ -27,8 +32,8 @@ function ClothesForm(props) {
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const endpoint = urlParams.get('e') ?? 'clv76u42u0008lgmpa0sv2lhw';
-  const beneficiary = urlParams.get('b') ?? '2LrZitixINmF2LnYsdmI2YE';
+  const endpoint = urlParams.get("e") ?? "clv76u42u0008lgmpa0sv2lhw";
+  const beneficiary = urlParams.get("b") ?? "2LrZitixINmF2LnYsdmI2YE";
 
   const FormElement = useRef(null);
   const FormPayload = useRef(null);
@@ -42,7 +47,13 @@ function ClothesForm(props) {
     if (!pieces) {
       setTotal(0);
     } else {
-      setTotal(pieces.reduce((acc, piece) => (parseFloat(acc) || 0 ) + (parseFloat(piece.numberFinalPrice) || 0), 0));
+      setTotal(
+        pieces.reduce(
+          (acc, piece) =>
+            (parseFloat(acc) || 0) + (parseFloat(piece.numberFinalPrice) || 0),
+          0
+        )
+      );
     }
   }, [pieces]);
 
@@ -51,19 +62,6 @@ function ClothesForm(props) {
       ...prev,
       [key]: value,
     }));
-  };
-
-  const ComponentMap = {
-    RsInput: ({ props, key, schema }) => (
-      <RsInput
-        label={props.label.value}
-        value={formValues[key]}
-        errorMessage={schema.validations[0].args.message}
-        onChange={handleChange}
-        type={schema.type}
-        key={key}
-      />
-    ),
   };
 
   // Handle form submission
@@ -389,7 +387,7 @@ function ClothesForm(props) {
                 sx={{ fontSize: "25px", fontWeight: 600, color: "green" }}
               >
                 <span dir="rtl">شيكل</span>
-                {" " + total }
+                {" " + total}
               </Typography>
             </>
           )}
@@ -401,6 +399,25 @@ function ClothesForm(props) {
                 <span dir="rtl">شيكل</span>
                 ...
               </Typography>
+            </>
+          )}
+
+          {pieces.length > 0 && (
+            <>
+              <Typography sx={{ fontSize: "25px", fontWeight: 600, marginTop: '2em' }}>
+                قائمة بالقطع المحجوزة:
+              </Typography>
+              <ul style={{ direction: "rtl" }}>
+                {pieces.map(
+                  ({ radioSize, dropGarmentType, numberFinalPrice }, index) => (
+                    <li>
+                      {dropGarmentType} ({radioSize}): {numberFinalPrice} شيكل
+                      &nbsp;
+                      <button onClick={() => deletePiece(index)}>إزالة</button>
+                    </li>
+                  )
+                )}
+              </ul>
             </>
           )}
         </Box>
@@ -433,17 +450,31 @@ function ClothesForm(props) {
   };
 
   const deletePiece = (index) => {
-    setPieces(currentPieces => [
+    setPieces((currentPieces) => [
       ...currentPieces.slice(0, index),
-      ...currentPieces.slice(index + 1)]);
-  }
+      ...currentPieces.slice(index + 1),
+    ]);
+  };
 
   return (
     <Container fixed sx={{ backgroundColor: "#f5f5f5" }}>
-      <form ref={FormElement} action={`https://forms.palcollective.com/f/${endpoint}`} method="POST">
-        <input style={{display: 'none'}} name='sum' value={total}></input>
-        <input style={{display: 'none'}} name='beneficiary' value={beneficiary}></input>
-        <input style={{display: 'none'}} ref={FormPayload} name='payload' value={JSON.stringify(pieces)}></input>
+      <form
+        ref={FormElement}
+        action={`https://forms.palcollective.com/f/${endpoint}`}
+        method="POST"
+      >
+        <input style={{ display: "none" }} name="sum" value={total}></input>
+        <input
+          style={{ display: "none" }}
+          name="beneficiary"
+          value={beneficiary}
+        ></input>
+        <input
+          style={{ display: "none" }}
+          ref={FormPayload}
+          name="payload"
+          value={JSON.stringify(pieces)}
+        ></input>
       </form>
       <Grid
         container
@@ -460,17 +491,11 @@ function ClothesForm(props) {
           ))}
         </>
       </Grid>
-      <ul style={{direction: 'rtl'}}>
-        {
-          pieces.map(({radioSize, dropGarmentType, numberFinalPrice}, index) => (
-            <li>{dropGarmentType} ({radioSize}): {numberFinalPrice}
-            &nbsp;<button onClick={() => deletePiece(index)}>إزالة</button></li>
-          ))
-        }
-      </ul>
-     { submitting && <div id='SubmissionScreen'>
-        <h1>الرجاء الانتظار</h1>
-      </div> }
+      {submitting && (
+        <div id="SubmissionScreen">
+          <h1>الرجاء الانتظار</h1>
+        </div>
+      )}
     </Container>
   );
 }

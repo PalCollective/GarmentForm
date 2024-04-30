@@ -75,7 +75,7 @@ function ClothesForm(props) {
     e.preventDefault();
     console.log(pieces);
     try {
-      const response = await axios.head(
+      const response = await axios.post(
         `https://forms.palcollective.com/f/${endpoint}`,
         { pieces }
       );

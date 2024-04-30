@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import RsInput from "./RsInput";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import RsNumberFormat from "./RsNumberFormat";
@@ -29,6 +29,9 @@ function ClothesForm(props) {
   const urlParams = new URLSearchParams(queryString);
   const endpoint = urlParams.get('e') ?? 'clv76u42u0008lgmpa0sv2lhw';
 
+  const FormElement = useRef(null);
+  const FormPayload = useRef(null);
+  const [submitting, setSubmitting] = useState(false);
   const [pieces, setPieces] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -74,21 +77,25 @@ function ClothesForm(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(pieces);
-    try {
-      const response = await axios.post(
-        `https://forms.palcollective.com/f/${endpoint}`,
-        { pieces }
-      );
 
-      console.log("API call successful:", response.data);
-      window.alert('انبعث الطلب وسنتواصل معك لتأكيد الدفع!');
+    setSubmitting(true);
+    FormElement.current.submit();
 
-      setPieces([]);
-    } catch (error) {
+    // try {
+    //   const response = await axios.post(
+    //     `https://forms.palcollective.com/f/${endpoint}`,
+    //     { pieces }
+    //   );
 
-      console.error("API call failed:", error);
-      window.alert('صارت مشكلة. جرب مرة ثانية.');
-    }
+    //   console.log("API call successful:", response.data);
+    //   window.alert('انبعث الطلب وسنتواصل معك لتأكيد الدفع!');
+
+    //   setPieces([]);
+    // } catch (error) {
+
+    //   console.error("API call failed:", error);
+    //   window.alert('صارت مشكلة. جرب مرة ثانية.');
+    // }
   };
 
   // Recursive function to render form components
@@ -417,6 +424,9 @@ function ClothesForm(props) {
 
   return (
     <Container fixed sx={{ backgroundColor: "#f5f5f5" }}>
+      <form ref={FormElement} action={`https://forms.palcollective.com/f/${endpoint}`} method="POST">
+        <input style={{display: 'none'}} ref={FormPayload} name='payload' value={JSON.stringify(pieces)}></input>
+      </form>
       <Grid
         container
         justifyContent="center"
@@ -432,6 +442,9 @@ function ClothesForm(props) {
           ))}
         </>
       </Grid>
+     { submitting && <div id='SubmissionScreen'>
+        <h1>الرجاء الانتظار</h1>
+      </div> }
     </Container>
   );
 }

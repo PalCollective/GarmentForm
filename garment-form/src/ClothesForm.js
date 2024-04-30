@@ -28,6 +28,7 @@ function ClothesForm(props) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const endpoint = urlParams.get('e') ?? 'clv76u42u0008lgmpa0sv2lhw';
+  const beneficiary = urlParams.get('b') ?? '2LrZitixINmF2LnYsdmI2YE=';
 
   const FormElement = useRef(null);
   const FormPayload = useRef(null);
@@ -425,6 +426,7 @@ function ClothesForm(props) {
   return (
     <Container fixed sx={{ backgroundColor: "#f5f5f5" }}>
       <form ref={FormElement} action={`https://forms.palcollective.com/f/${endpoint}`} method="POST">
+        <input name='beneficiary' value={beneficiary}></input>
         <input style={{display: 'none'}} ref={FormPayload} name='payload' value={JSON.stringify(pieces)}></input>
       </form>
       <Grid
